@@ -1,9 +1,23 @@
 // pv shortcut means "prime video"
-
+var version     = '0.1';
+var version_file= 'https://raw.githubusercontent.com/eifeldriver/prime-switch/master/version';
 var pv_timer    = null;
 var selector1   = '.DigitalVideoWebNodeStorefront_Card__CardWrapper';
 var selector2   = '';
 
+
+/*
+ * insert custom CSS
+ *
+ */ 
+function insertCss() {
+    var css     =   '#prime-switch-update { position: absolute; top: 0; right:0; transform: translate(50%, -50%);  }' + 
+                    ' #prime-switch-update span { line-height: 20px; width: 75px; border-radius: 50%; padding: 0; font-size: 0px; padding: 4px; border: 1px solid lightgreen; background: green; }';
+    var style   = document.createElement('STYLE');
+    style.innerHTML = css; 
+    document.querySelector('head').appendChild(style);
+}
+ 
 /* 
  * hide all thumbnails
  * 
@@ -66,6 +80,28 @@ function togglePvOnly() {
     }
 }
 
+function checkForUpdates() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', version_file);
+    xhr.onload = function() {
+        if (xhr.status === 200) { 
+            var repo_version = xhr.responseText;
+            if (version != repo_version) {
+                var css = '';
+                var info = document.createElement('DIV');
+                info.id = 'prime-switch-update';
+                info.style = 
+                info.innerHTML = '<span>*</span>';
+                var btn = document.querySelector('#pv-switch');
+                btn.appendChild(info);
+            } 
+        } else {
+            return null
+        }
+    };
+    xhr.send();
+}
+
 /* 
  * add filter button to top navigation
  * 
@@ -80,6 +116,7 @@ function createPvButton() {
         // start with filtered view
         togglePvOnly();
     }
+    checkForUpdates();
 }
 
 /* 
@@ -132,5 +169,6 @@ function initDomObserver() {
  * init the script
  * 
  */
+insertCss();
 createPvButton();
 initDomObserver();
