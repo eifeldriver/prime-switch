@@ -8,8 +8,10 @@ var pv_timer = null;
  */
 function disableAllPvThumbs() {
     var pv_thumbs = document.querySelectorAll('.DigitalVideoWebNodeStorefront_Card__CardWrapper');
-    for(var idx=0;idx<pv_thumbs.length;idx++) {
-        pv_thumbs[idx].style.display = 'none';
+    if (pv_rhumbs) {
+        for(var idx=0;idx<pv_thumbs.length;idx++) {
+            pv_thumbs[idx].style.display = 'none';
+        }
     }
 }
 
@@ -19,8 +21,10 @@ function disableAllPvThumbs() {
  */
 function enableAllPvThumbs() {
     var pv_thumbs = document.querySelectorAll('.DigitalVideoWebNodeStorefront_Card__CardWrapper');
-    for(var idx=0;idx<pv_thumbs.length;idx++) {
-        pv_thumbs[idx].style.display = 'inline-block';
+    if (pv_rhumbs) {
+        for(var idx=0;idx<pv_thumbs.length;idx++) {
+            pv_thumbs[idx].style.display = 'inline-block';
+        }
     }
 }
 
@@ -30,8 +34,10 @@ function enableAllPvThumbs() {
  */
 function enableOnlyPvThumbs() {
     var pv_thumbs = document.querySelectorAll('.DigitalVideoWebNodeStorefront_Card__CardWrapper .DigitalVideoUI_Logo__primeSash');
-    for (var idx=0;idx<pv_thumbs.length;idx++) {
-        pv_thumbs[idx].closest('.DigitalVideoWebNodeStorefront_Card__CardWrapper').style.display = 'inline-block';
+    if (pv_rhumbs) {
+        for (var idx=0;idx<pv_thumbs.length;idx++) {
+            pv_thumbs[idx].closest('.DigitalVideoWebNodeStorefront_Card__CardWrapper').style.display = 'inline-block';
+        }
     }
 }
 
@@ -41,18 +47,20 @@ function enableOnlyPvThumbs() {
  */
 function togglePvOnly() {
     var btn = document.querySelector('#Subnav #pv-switch');
-    if (btn.style.backgroundColor == 'green') {
-        // show all thumbs
-        enableAllPvThumbs();
-        btn.style.backgroundColor = 'inherit';
-        btn.style.color = 'inherit';
-        
-    } else {
-        // show only Prime Thumbs
-        disableAllPvThumbs();
-        enableOnlyPvThumbs();
-        btn.style.backgroundColor = 'green';
-        btn.style.color = 'white';
+    if (btn) {
+        if (btn.style.backgroundColor == 'green') {
+            // show all thumbs
+            enableAllPvThumbs();
+            btn.style.backgroundColor = 'inherit';
+            btn.style.color = 'inherit';
+            
+        } else {
+            // show only Prime Thumbs
+            disableAllPvThumbs();
+            enableOnlyPvThumbs();
+            btn.style.backgroundColor = 'green';
+            btn.style.color = 'white';
+        }
     }
 }
 
@@ -62,12 +70,14 @@ function togglePvOnly() {
  */
 function createPvButton() {
     var ul = document.querySelector('#Subnav ul');
-    var li = document.createElement('LI');
-    li.innerHTML = '<button id="pv-switch">Prime only</button>';
-    ul.appendChild(li);
-    li.addEventListener('click', togglePvOnly);
-    // start with filtered view
-    togglePvOnly();
+    if (ul) {
+        var li = document.createElement('LI');
+        li.innerHTML = '<button id="pv-switch">Prime only</button>';
+        ul.appendChild(li);
+        li.addEventListener('click', togglePvOnly);
+        // start with filtered view
+        togglePvOnly();
+    }
 }
 
 /* 
@@ -86,31 +96,33 @@ function refreshPvFilter() {
  */
 function initDomObserver() {
     var div = document.querySelector('#Storefront .DigitalVideoWebNodeStorefront_FiltersNav__FiltersNav + div');
-    var observer = new MutationObserver(
-        function(mutations) {
-            var btn = document.querySelector('#Subnav #pv-switch');
-            if (btn.style.backgroundColor == 'green') {
-                mutations.forEach(
-                    function(mutation) {
-                        if (mutation.type == 'childList') {
-                            window.clearTimeout(pv_timer);
-                            pv_timer = window.setTimeout(refreshPvFilter, 500);
+    if (div) {
+        var observer = new MutationObserver(
+            function(mutations) {
+                var btn = document.querySelector('#Subnav #pv-switch');
+                if (btn.style.backgroundColor == 'green') {
+                    mutations.forEach(
+                        function(mutation) {
+                            if (mutation.type == 'childList') {
+                                window.clearTimeout(pv_timer);
+                                pv_timer = window.setTimeout(refreshPvFilter, 500);
+                            }
                         }
-                    }
-                );
+                    );
+                }
             }
-        }
-    );
-    observer.observe(div, 
-        {
-          attributes: true,
-          characterData: true,
-          childList: true,
-          subtree: true,
-          attributeOldValue: true,
-          characterDataOldValue: true
-        }
-    );
+        );
+        observer.observe(div, 
+            {
+              attributes: true,
+              characterData: true,
+              childList: true,
+              subtree: true,
+              attributeOldValue: true,
+              characterDataOldValue: true
+            }
+        );
+    }
 }
 
 
