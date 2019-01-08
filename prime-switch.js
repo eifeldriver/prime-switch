@@ -12,7 +12,7 @@ var selector2   = '';
  */ 
 function insertCss() {
     var css     =   '#prime-switch-update { position: absolute; top: 0; right:0; transform: translate(50%, -50%);  }' + 
-                    ' #prime-switch-update span { line-height: 20px; width: 75px; border-radius: 50%; padding: 0; font-size: 0px; padding: 4px; border: 1px solid lightgreen; background: green; }';
+                    ' #prime-switch-update span { line-height: 20px; width: 75px; border-radius: 50%; padding: 0; font-size: 0px; padding: 4px; border: 1px solid lightgreen; background: red; }';
     var style   = document.createElement('STYLE');
     style.innerHTML = css; 
     document.querySelector('head').appendChild(style);
@@ -86,12 +86,13 @@ function checkForUpdates() {
     xhr.onload = function() {
         if (xhr.status === 200) { 
             var repo_version = xhr.responseText;
-            if (version != repo_version) {
+            if (version.trim() != repo_version.trim()) {
+                // other version available
                 var css = '';
                 var info = document.createElement('DIV');
                 info.id = 'prime-switch-update';
                 info.style = 
-                info.innerHTML = '<span>*</span>';
+                info.innerHTML = '<span title="Your version = ' + version + ' | New version = ' + repo_version + '">*</span>';
                 var btn = document.querySelector('#pv-switch');
                 btn.appendChild(info);
             } 
