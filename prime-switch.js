@@ -1,5 +1,5 @@
 // pv shortcut means "prime video"
-var version     = '0.1';
+var version     = '0.3';
 var version_file= 'https://raw.githubusercontent.com/eifeldriver/prime-switch/master/version';
 var pv_timer    = null;
 var selector1   = '.DigitalVideoWebNodeStorefront_Card__CardWrapper';
