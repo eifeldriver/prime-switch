@@ -8,7 +8,7 @@ var pv_timer = null;
  */
 function disableAllPvThumbs() {
     var pv_thumbs = document.querySelectorAll('.DigitalVideoWebNodeStorefront_Card__CardWrapper');
-    if (pv_rhumbs) {
+    if (pv_thumbs) {
         for(var idx=0;idx<pv_thumbs.length;idx++) {
             pv_thumbs[idx].style.display = 'none';
         }
@@ -21,7 +21,7 @@ function disableAllPvThumbs() {
  */
 function enableAllPvThumbs() {
     var pv_thumbs = document.querySelectorAll('.DigitalVideoWebNodeStorefront_Card__CardWrapper');
-    if (pv_rhumbs) {
+    if (pv_thumbs) {
         for(var idx=0;idx<pv_thumbs.length;idx++) {
             pv_thumbs[idx].style.display = 'inline-block';
         }
@@ -34,7 +34,7 @@ function enableAllPvThumbs() {
  */
 function enableOnlyPvThumbs() {
     var pv_thumbs = document.querySelectorAll('.DigitalVideoWebNodeStorefront_Card__CardWrapper .DigitalVideoUI_Logo__primeSash');
-    if (pv_rhumbs) {
+    if (pv_thumbs) {
         for (var idx=0;idx<pv_thumbs.length;idx++) {
             pv_thumbs[idx].closest('.DigitalVideoWebNodeStorefront_Card__CardWrapper').style.display = 'inline-block';
         }
