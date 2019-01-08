@@ -12,4 +12,5 @@ For example:
 * Opera : Scripter ( https://addons.opera.com/de/extensions/details/scripter-script-includer/ )
 * Firefox : Tampermonkey ( https://addons.mozilla.org/de/firefox/addon/tampermonkey/ )
 
-Go to Amazon prime and add a new custom script. Paste this Javascript code and save it.
+Go to Amazon prime and add a new custom script. Copy & paste the Javascript code from 'prime-script.js' and save it.
+After reload the page, the script will be execut automatically.
