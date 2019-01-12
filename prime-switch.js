@@ -1,8 +1,8 @@
 // pv shortcut means "prime video"
-var version     = '0.3';
-var version_file= 'https://raw.githubusercontent.com/eifeldriver/prime-switch/master/version';
-var pv_timer    = null;
-var selector1   = '.DigitalVideoWebNodeStorefront_Card__CardWrapper';
+var version             = '0.4';
+var version_file        = 'https://raw.githubusercontent.com/eifeldriver/prime-switch/master/version';
+var pv_timer            = null;
+var selector_vidthumb   = '.DigitalVideoWebNodeStorefront_Card__CardWrapper';
 var selector2   = '';
 
 
@@ -11,8 +11,11 @@ var selector2   = '';
  *
  */ 
 function insertCss() {
-    var css     =   '#prime-switch-update { position: absolute; top: 0; right:0; transform: translate(50%, -50%);  }' + 
-                    ' #prime-switch-update span { line-height: 20px; width: 75px; border-radius: 50%; padding: 0; font-size: 0px; padding: 4px; border: 1px solid lightgreen; background: red; }';
+    var css     =   '#pv-switch-wrapper { position: fixed; z-index: 999; top:1px; left: 1px; } ' + 
+                    '#pv-switch { background: #999; color: #333; } ' +
+                    '#pv-switch.active { background: green; color: white; } ' +
+                    '#prime-switch-update { position: absolute; top: 0; right:0; transform: translate(50%, -50%);  } ' + 
+                    '#prime-switch-update span { line-height: 20px; width: 75px; border-radius: 50%; padding: 0; font-size: 0px; padding: 4px; border: 1px solid lightgreen; background: red; } ';
     var style   = document.createElement('STYLE');
     style.innerHTML = css; 
     document.querySelector('head').appendChild(style);
@@ -23,7 +26,7 @@ function insertCss() {
  * 
  */
 function disableAllPvThumbs() {
-    var pv_thumbs = document.querySelectorAll(selector1);
+    var pv_thumbs = document.querySelectorAll(selector_vidthumb);
     if (pv_thumbs) {
         for(var idx=0;idx<pv_thumbs.length;idx++) {
             pv_thumbs[idx].style.display = 'none';
@@ -36,7 +39,7 @@ function disableAllPvThumbs() {
  * 
  */
 function enableAllPvThumbs() {
-    var pv_thumbs = document.querySelectorAll(selector1);
+    var pv_thumbs = document.querySelectorAll(selector_vidthumb);
     if (pv_thumbs) {
         for(var idx=0;idx<pv_thumbs.length;idx++) {
             pv_thumbs[idx].style.display = 'inline-block';
@@ -49,10 +52,10 @@ function enableAllPvThumbs() {
  * 
  */
 function enableOnlyPvThumbs() {
-    var pv_thumbs = document.querySelectorAll(selector1 + ' .DigitalVideoUI_Logo__primeSash, ' + selector1 + ' .DigitalVideoWebNodeStorefront_Card__primeBadge');
+    var pv_thumbs = document.querySelectorAll(selector_vidthumb + ' .DigitalVideoUI_Logo__primeSash, ' + selector_vidthumb + ' .DigitalVideoWebNodeStorefront_Card__primeBadge');
     if (pv_thumbs) {
         for (var idx=0;idx<pv_thumbs.length;idx++) {
-            pv_thumbs[idx].closest(selector1).style.display = 'inline-block';
+            pv_thumbs[idx].closest(selector_vidthumb).style.display = 'inline-block';
         }
     }
 }
@@ -62,20 +65,18 @@ function enableOnlyPvThumbs() {
  * 
  */
 function togglePvOnly() {
-    var btn = document.querySelector('#Subnav #pv-switch');
+    var btn = document.querySelector('#pv-switch');
     if (btn) {
-        if (btn.style.backgroundColor == 'green') {
+        if (btn.className.indexOf(' active') >= 0) {
             // show all thumbs
+            btn.className = btn.className.replace(' active', ''); //?
             enableAllPvThumbs();
-            btn.style.backgroundColor = 'inherit';
-            btn.style.color = 'inherit';
             
         } else {
             // show only Prime Thumbs
             disableAllPvThumbs();
             enableOnlyPvThumbs();
-            btn.style.backgroundColor = 'green';
-            btn.style.color = 'white';
+            btn.className += ' active';
         }
     }
 }
@@ -84,11 +85,10 @@ function checkForUpdates() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', version_file);
     xhr.onload = function() {
-        if (xhr.status === 200) { 
+        if (xhr.status == 200) { 
             var repo_version = xhr.responseText;
             if (version.trim() != repo_version.trim()) {
                 // other version available
-                var css = '';
                 var info = document.createElement('DIV');
                 info.id = 'prime-switch-update';
                 info.style = 
@@ -97,7 +97,7 @@ function checkForUpdates() {
                 btn.appendChild(info);
             } 
         } else {
-            return null
+            return null;
         }
     };
     xhr.send();
@@ -108,15 +108,14 @@ function checkForUpdates() {
  * 
  */
 function createPvButton() {
-    var ul = document.querySelector('#Subnav ul');
-    if (ul) {
-        var li = document.createElement('LI');
-        li.innerHTML = '<button id="pv-switch">Prime only</button>';
-        ul.appendChild(li);
-        li.addEventListener('click', togglePvOnly);
-        // start with filtered view
-        togglePvOnly();
-    }
+    var div         = document.createElement('DIV');
+    div.id          = 'pv-switch-wrapper';
+    div.innerHTML   = '<button id="pv-switch">Prime only</button>';
+    document.querySelector('#navbar').appendChild(div);
+    document.querySelector('#pv-switch').addEventListener('click', togglePvOnly);
+    // start with filtered view
+    togglePvOnly();
+    // check for updates
     checkForUpdates();
 }
 
@@ -139,7 +138,7 @@ function initDomObserver() {
     if (div) {
         var observer = new MutationObserver(
             function(mutations) {
-                var btn = document.querySelector('#Subnav #pv-switch');
+                var btn = document.querySelector('#pv-switch');
                 if (btn.style.backgroundColor == 'green') {
                     mutations.forEach(
                         function(mutation) {

@@ -1,10 +1,12 @@
 Changelog
 
-0.3
+0.4
 - change button position (always visible)
 
-0.2
+0.3
 - replace inline styles with custom CSS
+
+0.2
 - add update advice
 
 0.1
