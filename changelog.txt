@@ -1,0 +1,11 @@
+Changelog
+
+0.3
+- change button position (always visible)
+
+0.2
+- replace inline styles with custom CSS
+- add update advice
+
+0.1
+- initial version with basic functionality
