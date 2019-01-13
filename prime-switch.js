@@ -1,5 +1,5 @@
 // pv shortcut means "prime video"
-var version             = '0.41';
+var version             = '0.42';
 var version_file        = 'https://raw.githubusercontent.com/eifeldriver/prime-switch/master/version';
 var pv_timer            = null;
 var selector_vidthumb   = '.DigitalVideoWebNodeStorefront_Card__CardWrapper';
@@ -19,7 +19,10 @@ function insertCss() {
         '  font-size: 0px; padding: 4px; border: 1px solid lightgreen; background: red; ' +
         '} ' +
         '.flashit {  color:#f2f; animation: flash linear 3s 3; } ' +
-        '  @keyframes flash { 0% { opacity: 1; } 70% { opacity: .1; } 100% { opacity: 1; } }';
+        '  @keyframes flash { 0% { opacity: 1; } 70% { opacity: .1; } 100% { opacity: 1; } }' +
+        '.card-on  { display: inline-block; }' +
+        '.card-off { display: none !important; } ' +
+        '.cat-off { display: none !important; } ';
     var style   = document.createElement('STYLE');
     style.innerHTML = css;
     document.querySelector('head').appendChild(style);
@@ -32,8 +35,8 @@ function insertCss() {
 function disableAllPvThumbs() {
     var pv_thumbs = document.querySelectorAll(selector_vidthumb);
     if (pv_thumbs) {
-        for(var idx=0;idx<pv_thumbs.length;idx++) {
-            pv_thumbs[idx].style.display = 'none';
+        for(var idx=0; idx<pv_thumbs.length; idx++) {
+            pv_thumbs[idx].className += ' card-off';
         }
     }
 }
@@ -45,10 +48,11 @@ function disableAllPvThumbs() {
 function enableAllPvThumbs() {
     var pv_thumbs = document.querySelectorAll(selector_vidthumb);
     if (pv_thumbs) {
-        for(var idx=0;idx<pv_thumbs.length;idx++) {
-            pv_thumbs[idx].style.display = 'inline-block';
+        for(var idx=0; idx<pv_thumbs.length; idx++) {
+            pv_thumbs[idx].className = pv_thumbs[idx].className.replace(' card-off', ' card-on');
         }
     }
+    enableAllCategories();
 }
 
 /**
@@ -58,9 +62,36 @@ function enableAllPvThumbs() {
 function enableOnlyPvThumbs() {
     var pv_thumbs = document.querySelectorAll(selector_vidthumb + ' .DigitalVideoUI_Logo__primeSash, ' + selector_vidthumb + ' .DigitalVideoWebNodeStorefront_Card__primeBadge');
     if (pv_thumbs) {
-        for (var idx=0;idx<pv_thumbs.length;idx++) {
-            pv_thumbs[idx].closest(selector_vidthumb).style.display = 'inline-block';
+        for (var idx=0; idx<pv_thumbs.length; idx++) {
+            var vid = pv_thumbs[idx].closest(selector_vidthumb);
+            vid.className = vid.className.replace(' card-off', ' card-on');
         }
+    }
+    hideEmptyCategories();
+}
+
+/**
+ * disable all empty categories (means without any Prime included video)
+ */
+function hideEmptyCategories() {
+    var cats = document.querySelectorAll('.DigitalVideoWebNodeStorefront_Collection__Collection');
+    for (var idx=0; idx<cats.length; idx++) {
+        var cat = cats[idx];
+        if (cat.querySelectorAll('.card-on').length == 0) {
+            // no visible thumb found
+            cat.className += ' cat-off';
+        }
+    }
+}
+
+/**
+ * makes any category visible
+ */
+function enableAllCategories() {
+    var cats = document.querySelectorAll('.DigitalVideoWebNodeStorefront_Collection__Collection');
+    for (var idx=0; idx<cats.length; idx++) {
+        var cat = cats[idx];
+        cat.className = cat.className.replace(' cat-off', '');
     }
 }
 
