@@ -1,5 +1,9 @@
 Changelog
 
+0.41
+- small modify of the button position
+- add short flash if updates are available
+
 0.4
 - change button position (always visible)
 

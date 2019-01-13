@@ -1,29 +1,33 @@
 // pv shortcut means "prime video"
-var version             = '0.4';
+var version             = '0.41';
 var version_file        = 'https://raw.githubusercontent.com/eifeldriver/prime-switch/master/version';
 var pv_timer            = null;
 var selector_vidthumb   = '.DigitalVideoWebNodeStorefront_Card__CardWrapper';
-var selector2   = '';
 
-
-/*
+/**
  * insert custom CSS
  *
- */ 
+ */
 function insertCss() {
-    var css     =   '#pv-switch-wrapper { position: fixed; z-index: 999; top:1px; left: 1px; } ' + 
-                    '#pv-switch { background: #999; color: #333; } ' +
-                    '#pv-switch.active { background: green; color: white; } ' +
-                    '#prime-switch-update { position: absolute; top: 0; right:0; transform: translate(50%, -50%);  } ' + 
-                    '#prime-switch-update span { line-height: 20px; width: 75px; border-radius: 50%; padding: 0; font-size: 0px; padding: 4px; border: 1px solid lightgreen; background: red; } ';
+    var css     =   '' +
+        '#pv-switch-wrapper { position: fixed; z-index: 999; top: 5px; left: 1px; } ' +
+        '#pv-switch { background: #999; color: #333; } ' +
+        '#pv-switch.active { background: green; color: white; } ' +
+        '#prime-switch-update { position: absolute; top: 0; right:0; transform: translate(50%, -50%);  } ' +
+        '#prime-switch-update span { ' +
+        '  line-height: 20px; width: 75px; border-radius: 50%; padding: 0; ' +
+        '  font-size: 0px; padding: 4px; border: 1px solid lightgreen; background: red; ' +
+        '} ' +
+        '.flashit {  color:#f2f; animation: flash linear 3s 3; } ' +
+        '  @keyframes flash { 0% { opacity: 1; } 70% { opacity: .1; } 100% { opacity: 1; } }';
     var style   = document.createElement('STYLE');
-    style.innerHTML = css; 
+    style.innerHTML = css;
     document.querySelector('head').appendChild(style);
 }
- 
-/* 
+
+/**
  * hide all thumbnails
- * 
+ *
  */
 function disableAllPvThumbs() {
     var pv_thumbs = document.querySelectorAll(selector_vidthumb);
@@ -34,9 +38,9 @@ function disableAllPvThumbs() {
     }
 }
 
-/* 
+/**
  * show all thumbnails
- * 
+ *
  */
 function enableAllPvThumbs() {
     var pv_thumbs = document.querySelectorAll(selector_vidthumb);
@@ -47,9 +51,9 @@ function enableAllPvThumbs() {
     }
 }
 
-/* 
+/**
  * enable only thumbnails on Prime included items
- * 
+ *
  */
 function enableOnlyPvThumbs() {
     var pv_thumbs = document.querySelectorAll(selector_vidthumb + ' .DigitalVideoUI_Logo__primeSash, ' + selector_vidthumb + ' .DigitalVideoWebNodeStorefront_Card__primeBadge');
@@ -60,9 +64,9 @@ function enableOnlyPvThumbs() {
     }
 }
 
-/* 
+/**
  * toggle filter on / off
- * 
+ *
  */
 function togglePvOnly() {
     var btn = document.querySelector('#pv-switch');
@@ -81,21 +85,24 @@ function togglePvOnly() {
     }
 }
 
+/**
+ * check Github version with local version
+ */
 function checkForUpdates() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', version_file);
     xhr.onload = function() {
-        if (xhr.status == 200) { 
+        if (xhr.status == 200) {
             var repo_version = xhr.responseText;
             if (version.trim() != repo_version.trim()) {
                 // other version available
-                var info = document.createElement('DIV');
-                info.id = 'prime-switch-update';
-                info.style = 
-                info.innerHTML = '<span title="Your version = ' + version + ' | New version = ' + repo_version + '">*</span>';
+                var info        = document.createElement('DIV');
+                info.id         = 'prime-switch-update';
+                info.className  = 'flashit';
+                info.innerHTML  = '<span title="Your version = ' + version + ' | New version = ' + repo_version + '">*</span>';
                 var btn = document.querySelector('#pv-switch');
                 btn.appendChild(info);
-            } 
+            }
         } else {
             return null;
         }
@@ -103,9 +110,9 @@ function checkForUpdates() {
     xhr.send();
 }
 
-/* 
+/**
  * add filter button to top navigation
- * 
+ *
  */
 function createPvButton() {
     var div         = document.createElement('DIV');
@@ -119,9 +126,9 @@ function createPvButton() {
     checkForUpdates();
 }
 
-/* 
+/**
  * update filtered view
- * 
+ *
  */
 function refreshPvFilter() {
     // update view after scrolling and dynamic loads
@@ -129,9 +136,9 @@ function refreshPvFilter() {
     enableOnlyPvThumbs();
 }
 
-/* 
+/**
  * watch for new loaded items after scrolling
- * 
+ *
  */
 function initDomObserver() {
     var div = document.querySelector('#Storefront .DigitalVideoWebNodeStorefront_FiltersNav__FiltersNav + div');
@@ -151,7 +158,7 @@ function initDomObserver() {
                 }
             }
         );
-        observer.observe(div, 
+        observer.observe(div,
             {
               attributes: true,
               characterData: true,
@@ -165,9 +172,9 @@ function initDomObserver() {
 }
 
 
-/* 
+/**
  * init the script
- * 
+ *
  */
 insertCss();
 createPvButton();
