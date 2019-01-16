@@ -1,8 +1,25 @@
 // pv shortcut means "prime video"
-var version             = '0.42';
+var _debug              = 0;
+var version             = '0.5';
 var version_file        = 'https://raw.githubusercontent.com/eifeldriver/prime-switch/master/version';
 var pv_timer            = null;
+var watcher             = null;
+var is_loading          = null;
 var selector_vidthumb   = '.DigitalVideoWebNodeStorefront_Card__CardWrapper';
+var selector_spinner    = '.DigitalVideoUI_Spinner__spinner';
+
+
+/**
+ * debug function
+ */
+function pv_debug(txt) {
+    if (_debug) {
+        var d = new Date();
+        var now = [d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()].join(':');
+        console.log(now + ': ' + txt);
+    }
+}
+
 
 /**
  * insert custom CSS
@@ -36,9 +53,10 @@ function disableAllPvThumbs() {
     var pv_thumbs = document.querySelectorAll(selector_vidthumb);
     if (pv_thumbs) {
         for(var idx=0; idx<pv_thumbs.length; idx++) {
-            pv_thumbs[idx].className += ' card-off';
+            pv_thumbs[idx].className = pv_thumbs[idx].className.replace(' card-on', '') + ' card-off';
         }
     }
+    enableAllCategories();
 }
 
 /**
@@ -49,7 +67,7 @@ function enableAllPvThumbs() {
     var pv_thumbs = document.querySelectorAll(selector_vidthumb);
     if (pv_thumbs) {
         for(var idx=0; idx<pv_thumbs.length; idx++) {
-            pv_thumbs[idx].className = pv_thumbs[idx].className.replace(' card-off', ' card-on');
+            pv_thumbs[idx].className = pv_thumbs[idx].className.replace(' card-on', '').replace(' card-off', '') + ' card-on';
         }
     }
     enableAllCategories();
@@ -151,10 +169,6 @@ function createPvButton() {
     div.innerHTML   = '<button id="pv-switch">Prime only</button>';
     document.querySelector('#navbar').appendChild(div);
     document.querySelector('#pv-switch').addEventListener('click', togglePvOnly);
-    // start with filtered view
-    togglePvOnly();
-    // check for updates
-    checkForUpdates();
 }
 
 /**
@@ -165,6 +179,40 @@ function refreshPvFilter() {
     // update view after scrolling and dynamic loads
     disableAllPvThumbs();
     enableOnlyPvThumbs();
+}
+
+/**
+ * simple check for dynamic reload is running
+ */
+function isDynLoading() {
+    // DOM element only exists on running reload
+    return document.querySelectorAll(selector_spinner).length;
+}
+
+function watchDynReloading() {
+    pv_debug('is_loading = ' + is_loading ? '1' : '0');
+    if (isDynLoading()) {
+        is_loading = 1;
+        pv_debug('re-loading running');
+
+    } else {
+        if (is_loading) {
+            // reload finished
+            is_loading = 0;
+            pv_debug('loading finished');
+            refreshPvFilter();
+            initWatcher();
+        } else {
+            pv_debug('still watching');
+        }
+    }
+}
+
+function initWatcher() {
+    window.clearInterval(watcher);
+    pv_debug('watcher cleared');
+    watcher = window.setInterval(watchDynReloading, 1000);
+    pv_debug('watcher installed');
 }
 
 /**
@@ -182,7 +230,7 @@ function initDomObserver() {
                         function(mutation) {
                             if (mutation.type == 'childList') {
                                 window.clearTimeout(pv_timer);
-                                pv_timer = window.setTimeout(refreshPvFilter, 500);
+                                pv_timer = window.setTimeout(refreshPvFilter, 1000);
                             }
                         }
                     );
@@ -209,4 +257,14 @@ function initDomObserver() {
  */
 insertCss();
 createPvButton();
-initDomObserver();
+// check for updates
+checkForUpdates();
+
+// ineable dyn. loading observer or watcher
+// initDomObserver();
+initWatcher();
+
+// start with filtered view
+togglePvOnly();
+
+console.log('Prime-switch started.');
