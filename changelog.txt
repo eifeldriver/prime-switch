@@ -1,5 +1,8 @@
 Changelog
 
+0.5
+- Implement a new way to process the dyn. reload correctly
+
 0.42
 - hide all categories without any Prime included vids
 
