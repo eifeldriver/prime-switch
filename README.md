@@ -31,7 +31,8 @@ You have to copy the raw source code and put it into the new created script insi
 Save the copied code inside TM with the shortcut CTRL+S or via TM-menu "File - Save to disk".
 Now call the Amazon Prime website to see if you see the filter button.
 ![pic 2](https://github.com/eifeldriver/prime-switch/blob/master/preview_filter_button.jpg?raw=true)
-[Try my Flickr-page to test the copy-icon](https://www.amazon.de/Amazon-Video/b?ie=UTF8&node=3010075031 )
+
+[open Amazon Prime page to test](https://www.amazon.de/Amazon-Video/b?ie=UTF8&node=3010075031 )
 
 # Final
 
