@@ -1,17 +1,38 @@
-# prime-switch
-Javascript to add a filter button on the Amazone Prime Video page
+# Prime-Switch
+Custom Javascript to add some features to the Amazon Video website.
 
-# Description
-This script add a small button to the subnavigation tor dis-/enable the Prime Only-filter.
+# Features
+* add Button to dis-/enable Prime included thumbnails only
 
 # Requirements
-To run this script at any Amazone Prime video page load, you have to install a browser addon for custom script execution.
+You have to install a browser addon to add custom script to any website.
 
-For example:
-* Chrome : Custom Scripts ( https://chrome.google.com/webstore/detail/custom-javascript-for-web/poakhlngfciodnhlhhgnaaelnpjljija )
-* Opera : Scripter ( https://addons.opera.com/de/extensions/details/scripter-script-includer/ )
-* Firefox : Tampermonkey ( https://addons.mozilla.org/de/firefox/addon/tampermonkey/ )
+I recommend Tampermonkey:
+* [Tampermonkey for Chrome](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+* [Tampermonkey for Opera](https://addons.opera.com/de/extensions/details/tampermonkey-beta/)
+* [Tampermonkey for Firefox](https://addons.mozilla.org/de/firefox/addon/tampermonkey/)
 
-Go to Amazon prime video page and add a new custom script. 
-Copy & paste the Javascript code from 'prime-script.js' and save it.
-Now, after any reload of Amazone prime video page, the script will be execute automatically.
+# Get started
+In this tutorial I use "TM" as shortcut for the word "Tampermonkey".
+
+1. Install the addon
+Click on the link above and install TM to your favorit browser. After that you see the TM-Icon right top.
+
+2. Add a new script 
+Right-click on that new icon in your browser and click on "Create a new script".
+![pic1](https://c1.staticflickr.com/8/7844/46390822204_603ee56e06.jpg)
+
+3. Copy source code
+All the script logic is placed in one single file. Your find it here in this repository.
+You have to copy the raw source code and put it into the new created script inside TM.
+[open the RAW view of the source code](https://raw.githubusercontent.com/eifeldriver/prime-switch/master/prime-switch.js)
+
+4. Save and test it
+Save the copied code inside TM with the shortcut CTRL+S or via TM-menu "File - Save to disk".
+Now call the Amazon Prime website to see if you see the filter button.
+!(https://github.com/eifeldriver/prime-switch/blob/master/preview_filter_button.jpg?raw=true)
+[Try my Flickr-page to test the copy-icon](https://www.amazon.de/Amazon-Video/b?ie=UTF8&node=3010075031 )
+
+# Final
+
+Now, after any reload of DIM page, the script will be execute automatically.
