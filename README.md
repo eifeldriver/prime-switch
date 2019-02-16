@@ -20,7 +20,7 @@ Click on the link above and install TM to your favorit browser. After that you s
 
 2. Add a new script 
 Right-click on that new icon in your browser and click on "Create a new script".
-![pic1](https://c1.staticflickr.com/8/7844/46390822204_603ee56e06.jpg)
+![pic 1](https://c1.staticflickr.com/8/7844/46390822204_603ee56e06.jpg)
 
 3. Copy source code
 All the script logic is placed in one single file. Your find it here in this repository.
@@ -30,7 +30,7 @@ You have to copy the raw source code and put it into the new created script insi
 4. Save and test it
 Save the copied code inside TM with the shortcut CTRL+S or via TM-menu "File - Save to disk".
 Now call the Amazon Prime website to see if you see the filter button.
-!(https://github.com/eifeldriver/prime-switch/blob/master/preview_filter_button.jpg?raw=true)
+![pic 2](https://github.com/eifeldriver/prime-switch/blob/master/preview_filter_button.jpg?raw=true)
 [Try my Flickr-page to test the copy-icon](https://www.amazon.de/Amazon-Video/b?ie=UTF8&node=3010075031 )
 
 # Final
